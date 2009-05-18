@@ -1,0 +1,30 @@
+= Routes
+== A routes library for ruby
+
+USAGE:
+
+		Routes::Building.draw do
+		  map '/posts', :controller => 'posts', :action => 'index'
+		  map '/posts/:id', :controller => 'posts'
+		  map '/controller/:action', {}
+		  map '/:controller/:action/:id', {}
+		  map '/cool', lambda { |path| "This is #{path}" }
+		  map /.*/, :action => 'anything'
+		end
+
+
+		Routes::Recognition.new('/posts').recognize # => { :controller => 'posts', :action => 'index' }
+
+		Routes::Recognition.new('/posts/1').recognize # => { :controller => 'posts', :id => '1' }
+
+		Routes::Recognition.new('/controller/new').recognize # => { :action => 'new' }
+
+		Routes::Recognition.new('/posts/show/1').recognize # => { :controller => 'posts', :action => 'show', :id => '1' }
+
+		Routes::Recognition.new('/something').recognize # => { :action => 'anything' }
+
+		Routes::Recognition.new('/cool').recognize # => "This is /cool"
+
+		
+CONTRIBUTIONS
+I'm open to contributions and suggestions. Drop me an email at info@oscardelben.com
