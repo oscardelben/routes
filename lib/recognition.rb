@@ -15,29 +15,45 @@ module Routes
       
         filter_route!
       
-        return give_back_result if @result
+        return result if result
       end
     
       # Nothing matched
-      give_back_result
+      result
     end
   
     private
+    
+    def filter_route!
+      if route_pattern.is_a? String
+        match_with_string
+      elsif route_pattern.respond_to?(:match)
+        match_with_regexp
+      end
+    end
+    
+    def match_with_string
+      if compatible_segments?     
+        match_segments
+      else
+        self.result = nil
+      end
+    end
+  
+    def match_with_regexp
+      if route_pattern =~ path
+        return result
+      else
+        self.result = nil
+      end
+    end
   
     def segments_from_string(path)
       path[1..-1].split('/')
     end
   
-    def give_back_result
-      if result.respond_to?(:call)
-        result.call(path)
-      else
-        result
-      end
-    end
-  
     def update_result(key, value)
-      @result.merge!(key => value)
+      self.result.merge!(key => value)
     end
   
     def route_segments
@@ -46,30 +62,6 @@ module Routes
   
     def path_segments
       segments_from_string(path)
-    end
-  
-    def filter_route!
-      if route_pattern.is_a? String
-        match_with_string
-      elsif route_pattern.respond_to?(:match)
-        match_with_regexp
-      end
-    end
-  
-    def match_with_string
-      if compatible_segments?     
-        match_segments
-      else
-        @result = nil
-      end
-    end
-  
-    def match_with_regexp
-      if route_pattern =~ path
-        return give_back_result
-      else
-        result = nil
-      end
     end
   
     # TODO: path_segments is calculated 2 times
@@ -84,7 +76,7 @@ module Routes
         if route_segment[0] == ?:
           update_result(eval(route_segment), path_segment)
         elsif path_segment != route_segment
-          @result = nil
+          self.result = nil
           break
         end
       end

@@ -1,5 +1,6 @@
 = Routes
-= A routes library for ruby
+
+A routes library for ruby
 
 USAGE:
 
@@ -23,8 +24,10 @@ USAGE:
 
 	Routes::Recognition.new('/something').recognize # => { :action => 'anything' }
 
-	Routes::Recognition.new('/cool').recognize # => "This is /cool"
+	Routes::Recognition.new('/cool').recognize.call('/cool') # => "This is /cool"
 
+
+Note that the library will not execute lambdas itself, so it's your responsibility to test the result returned. This allow more flexibility in my opinion because you can pass additional parameters to it like the env object.
 		
 CONTRIBUTIONS
 

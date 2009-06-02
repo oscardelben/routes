@@ -83,8 +83,9 @@ describe Routes do
       Routes::Recognition.new('/something').recognize.should == { :action => 'anything' }
     end
         
-    it "should directly execute lambda routes" do
-      Routes::Recognition.new('/cool').recognize.should == "This is /cool"
+    it "should return lambda routes" do
+      route = Routes::Recognition.new('/cool').recognize
+      route.call('/cool').should == "This is /cool"
     end
     
   end
