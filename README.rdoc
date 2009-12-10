@@ -1,5 +1,7 @@
 = Routes
 
+UPDATE: Note that this was a part time project that it's now discontinued, as using a rak middleware would probably be a better solution.
+
 A routes library for ruby
 
 USAGE:
